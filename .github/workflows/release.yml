@@ -17,30 +17,22 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
       - uses: dtolnay/rust-toolchain@stable
         with:
           cache: rust
       - name: Install dependencies
-        run: npm ci
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
       - name: Build web assets
-        run: npm run build || echo "no build script"
+        run: pnpm run build
       - name: Tauri build
+        shell: bash
         run: |
           set -e
-          # Try using npm script and pass args correctly
-          if npm run tauri -- build --release >/dev/null 2>&1; then
-            echo "ran npm run tauri -- build --release"
-          else
-            # Fallback to local tauri CLI via npx (no install)
-            if npx --no-install tauri build --release >/dev/null 2>&1; then
-              echo "ran npx --no-install tauri build --release"
-            else
-              echo "Tauri build failed or tauri CLI not available; ensure @tauri-apps/cli is installed in devDependencies" >&2
-              exit 1
-            fi
-          fi
+          pnpm exec tauri build
       - name: Upload bundle artifact
         uses: actions/upload-artifact@v4
         with:
@@ -74,6 +66,7 @@ jobs:
           UPLOAD_URL: ${{ steps.create_release.outputs.upload_url }}
         run: |
           set -euo pipefail
+          upload_base="${UPLOAD_URL%%\{*}"
           echo "Searching for macOS (.dmg) and Windows (.exe) installers..."
           found_mac=0
           found_win=0
@@ -83,7 +76,7 @@ jobs:
             asset_name="MyNovel2EPUB-${{ github.ref_name }}-mac-${name}"
             content_type="application/x-apple-diskimage"
             echo "Uploading macOS asset $file as $asset_name"
-            curl --fail -sS -X POST "${UPLOAD_URL}?name=$(printf '%s' "$asset_name" | sed -e 's/ /%20/g')" \
+            curl --fail -sS -X POST "${upload_base}?name=$(printf '%s' "$asset_name" | sed -e 's/ /%20/g')" \
               -H "Authorization: token ${GITHUB_TOKEN}" \
               -H "Content-Type: ${content_type}" \
               --data-binary @"$file"
@@ -96,7 +89,7 @@ jobs:
             asset_name="MyNovel2EPUB-${{ github.ref_name }}-win-${name}"
             content_type="application/vnd.microsoft.portable-executable"
             echo "Uploading windows asset $file as $asset_name"
-            curl --fail -sS -X POST "${UPLOAD_URL}?name=$(printf '%s' "$asset_name" | sed -e 's/ /%20/g')" \
+            curl --fail -sS -X POST "${upload_base}?name=$(printf '%s' "$asset_name" | sed -e 's/ /%20/g')" \
               -H "Authorization: token ${GITHUB_TOKEN}" \
               -H "Content-Type: ${content_type}" \
               --data-binary @"$file"
