@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="../Styles/mybooks.css"/>
+</head>
+<body class="theme-future-fantasy layout-horizontal">
+    <div class="chapter-page {{ variant_class }} has-header-art header-layout-banner-below" id="{{ chapter_id }}">
+        <div class="chapter-content-shell">
+            <div class="chapter-header chapter-header--banner chapter-header--banner-below">
+                <figure class="chapter-inline-image chapter-header-art chapter-header-art--corner-subtle">
+                    <img src="{{ header_image_href }}" alt="章节头图" width="1080" height="608"/>
+                </figure>
+                <div class="chapter-info-block">
+                    <h2 class="chapter-title"><span class="chapter-name">{{ title }}</span></h2>
+                </div>
+            </div>
+            <div class="chapter-flow">
+                {% if header_ornament_href %}
+                <div class="chapter-header-ornament" aria-hidden="true">
+                    <div class="chapter-ornament is-svg-decoration" aria-hidden="true" style="text-align:center;">
+                        <img src="{{ header_ornament_href }}" alt="" width="196" height="26" style="display:block;margin:0 auto;"/>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="chapter-body">
+                    {% for p in paragraphs %}<p class="chapter-paragraph">{{ p }}</p>
+                    {% endfor %}
+                </div>
+                {% if footer_ornament_href %}
+                <div class="chapter-footer" aria-hidden="true">
+                    <div class="chapter-divider is-svg-decoration" aria-hidden="true" style="text-align:center;">
+                        <img src="{{ footer_ornament_href }}" alt="" width="132" height="22" style="display:block;margin:0 auto;"/>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

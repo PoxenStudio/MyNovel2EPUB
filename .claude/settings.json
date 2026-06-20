@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo build *)",
+      "Bash(git rm *)",
+      "Bash(python3 -c \"import PIL; print\\(PIL.__version__\\)\")",
+      "Bash(find /opt/homebrew/Caskroom /opt/homebrew/share/fonts /Library/Fonts ~/Library/Fonts -iname \"*.ttf\" -o -iname \"*.otf\" 2>/dev/null | grep -iE \"noto|source.?han|wqy|cjk\" | head -20)",
+      "Read(//opt/homebrew/Caskroom/**)",
+      "Bash(file public/fonts/*.ttf)",
+      "Bash(bash)",
+      "Bash(python3 /tmp/gen_chapter_assets.py)",
+      "Bash(python3 -)",
+      "Bash(cargo fetch *)",
+      "Read(//Users/horkychen/.cargo/registry/src/**)",
+      "Bash(npm ls *)"
+    ],
+    "additionalDirectories": [
+      "/tmp",
+      "/private/tmp"
+    ]
+  }
+}

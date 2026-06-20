@@ -1,0 +1,42 @@
+[
+  {
+    "id": "fantasy",
+    "promptKeywords": "史诗级奇幻场景，漂浮的岛屿，发光的魔法符文，手持发光宝剑的孤独英雄剪影，戏剧性的云层，鲜明的紫色和金色调色板",
+    "chapterStyleId": "fantasy"
+  },
+  {
+    "id": "wuxia",
+    "promptKeywords": "经典武侠场景，剑客身着飘逸长袍在屋顶或竹林间飞跃，水墨质感背景，柔和的大地色调配红色点缀，戏剧性的运动模糊",
+    "chapterStyleId": "wuxia"
+  },
+  {
+    "id": "urban_romance",
+    "promptKeywords": "现代浪漫都市场景，金色时刻，优雅人物映衬城市天际线，柔和的散景灯光，温暖的粉彩色调，逼真的浪漫氛围",
+    "chapterStyleId": "urban_romance"
+  },
+  {
+    "id": "period_romance",
+    "promptKeywords": "中国传统汉服服饰，优雅人物置身于繁花盛开的宫廷庭院，精致的工笔画风格，柔和的粉色和金色调，宁静浪漫的氛围",
+    "chapterStyleId": "period_romance"
+  },
+  {
+    "id": "scifi",
+    "promptKeywords": "未来科幻场景，高耸的霓虹灯光大都市或星际飞船内部，身着光滑盔甲的孤独人物，冷蓝色和霓虹青色调色板，电影级景深",
+    "chapterStyleId": "scifi"
+  },
+  {
+    "id": "mystery",
+    "promptKeywords": "黑暗神秘氛围，雨夜城市街道，路灯下的神秘身影，迷雾，高对比度明暗对比照明，去饱和的蓝灰色调色板配单一红色点缀",
+    "chapterStyleId": "mystery"
+  },
+  {
+    "id": "horror",
+    "promptKeywords": "诡异的超自然恐怖氛围，被迷雾笼罩的废弃古建筑，幽灵般的半透明身影，深邃阴影，冷绿灰色调，令人不安的氛围",
+    "chapterStyleId": "horror"
+  },
+  {
+    "id": "history",
+    "promptKeywords": "中国古典历史场景，战旗、巍峨建筑、长矛利剑等元素，宏大历史序事的氛围",
+    "chapterStyleId": "history"
+  }
+]
