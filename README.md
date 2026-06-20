@@ -18,9 +18,9 @@ MyNovel2EPUB 是一款基于 React + Tauri + Rust 架构开发的轻量级、高
 > Tauri 不支持"交叉打包"——在 macOS 上无法直接生成 Windows 安装包，反之亦然。本机只能构建当前系统对应的安装包；要同时产出 Windows + macOS 两份安装包，需在对应系统上各跑一次构建，或使用下方的 CI 矩阵构建。
 
 ## 主UI
-[IMPORT](docs/main_ui_import.png)
+![IMPORT](docs/main_ui_import.png)
 
-[IMPORT](docs/main_ui_config.png)
+![CONFIG](docs/main_ui_config.png)
 
 ## 开发调试
 
