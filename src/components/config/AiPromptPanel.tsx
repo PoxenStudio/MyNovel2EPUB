@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import { buildAiPrompt } from "../../utils/aiPrompt";
 import type { GenrePreset } from "../../types";
@@ -26,6 +25,22 @@ export function AiPromptPanel({ title, author, genrePreset, onTemplateUploaded }
     setTimeout(() => setCopied(false), 1500);
   }
 
+  async function handleUploadTemplate() {
+    try {
+      const selected = await open({ multiple: false, directory: false });
+      if (!selected) {
+        setError("未选择文件");
+        return;
+      }
+      // `open` may return string or string[] depending on options; normalize
+      const path = Array.isArray(selected) ? selected[0] : selected;
+      onTemplateUploaded(path as string);
+      setError(null);
+    } catch (e) {
+      setError(String(e));
+    }
+  }
+
   return (
     <div className="flex w-full flex-col items-center gap-2">
       <textarea
@@ -36,6 +51,9 @@ export function AiPromptPanel({ title, author, genrePreset, onTemplateUploaded }
       <div className="flex gap-2">
         <button type="button" className="btn btn-sm" onClick={handleCopy}>
           {copied ? "✅ 已复制" : "📋 一键复制"}
+        </button>
+        <button type="button" className="btn btn-sm" onClick={handleUploadTemplate}>
+          上传模板
         </button>
       </div>
       {error && <div className="alert alert-error text-sm">{error}</div>}

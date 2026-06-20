@@ -124,7 +124,7 @@ export function ImportStep() {
           type="button"
           className="btn btn-primary"
           disabled={!state.sourcePath || isParsing}
-          onClick={handleParse}
+          onClick={() => handleParse()}
         >
           {isParsing ? "解析中..." : "🔍 开始分析"}
         </button>
