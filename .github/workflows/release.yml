@@ -4,10 +4,10 @@ on:
   push:
     tags: ["v*"]
 
-jobs:
-  permissions:
-    contents: write
+permissions:
+  contents: write
 
+jobs:
   build:
     strategy:
       matrix:
@@ -74,23 +74,37 @@ jobs:
           UPLOAD_URL: ${{ steps.create_release.outputs.upload_url }}
         run: |
           set -euo pipefail
-          echo "Searching for macOS (.dmg .pkg .zip .tar.gz) and Windows (.exe .msi .zip) installers..."
-          find artifacts -type f \( -iname "*.dmg" -o -iname "*.pkg" -o -iname "*.zip" -o -iname "*.tar.gz" -o -iname "*.exe" -o -iname "*.msi" \) -print0 | while IFS= read -r -d '' file; do
+          echo "Searching for macOS (.dmg) and Windows (.exe) installers..."
+          found_mac=0
+          found_win=0
+          # macOS: prefer .dmg
+          while IFS= read -r -d '' file; do
             name=$(basename "$file")
-            # Filter by platform: skip archive types that are ambiguous if needed; here we upload both mac and win matches
-            case "$name" in
-              *.dmg) content_type="application/x-apple-diskimage" ;;
-              *.pkg) content_type="application/octet-stream" ;;
-              *.zip) content_type="application/zip" ;;
-              *.tar.gz) content_type="application/gzip" ;;
-              *.exe) content_type="application/vnd.microsoft.portable-executable" ;;
-              *.msi) content_type="application/x-msi" ;;
-              *) content_type="application/octet-stream" ;;
-            esac
-            echo "Uploading $file as $name (type: $content_type)"
-            curl --fail -sS -X POST "${UPLOAD_URL}?name=$(printf '%s' "$name" | sed -e 's/ /%20/g')" \
+            asset_name="MyNovel2EPUB-${{ github.ref_name }}-mac-${name}"
+            content_type="application/x-apple-diskimage"
+            echo "Uploading macOS asset $file as $asset_name"
+            curl --fail -sS -X POST "${UPLOAD_URL}?name=$(printf '%s' "$asset_name" | sed -e 's/ /%20/g')" \
               -H "Authorization: token ${GITHUB_TOKEN}" \
               -H "Content-Type: ${content_type}" \
               --data-binary @"$file"
-          done
+            found_mac=1
+          done < <(find artifacts -type f -iname "*.dmg" -print0)
+
+          # windows: prefer .exe
+          while IFS= read -r -d '' file; do
+            name=$(basename "$file")
+            asset_name="MyNovel2EPUB-${{ github.ref_name }}-win-${name}"
+            content_type="application/vnd.microsoft.portable-executable"
+            echo "Uploading windows asset $file as $asset_name"
+            curl --fail -sS -X POST "${UPLOAD_URL}?name=$(printf '%s' "$asset_name" | sed -e 's/ /%20/g')" \
+              -H "Authorization: token ${GITHUB_TOKEN}" \
+              -H "Content-Type: ${content_type}" \
+              --data-binary @"$file"
+            found_win=1
+          done < <(find artifacts -type f -iname "*.exe" -print0)
+
+          if [ "$found_mac" -eq 0 ] && [ "$found_win" -eq 0 ]; then
+            echo "No .dmg or .exe installers found to upload" >&2
+            exit 1
+          fi
 
